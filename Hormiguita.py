@@ -4,8 +4,8 @@ import numpy as np
 import time
 
 #Lassen Sie uns die Ausgangsposition einstellen
-x0 = 750/2
-y0 = 750/2
+x0 = 600/2
+y0 = 600/2
 zelleW = 0
 zelleH = 0
 MATRIX = np.zeros((100, 100))
@@ -14,7 +14,7 @@ pym = 0
 #Richtungen 
 #1 = rechts - 2 = süd - 3 = links - 4 = nord
 #Richtung einstellen
-richtung = 1
+richtung = 2
 #Farben
 # 0 = weiß - 1 = schwarz
 
@@ -109,8 +109,8 @@ def aktualiserenPapier(papier):
         return True
 
 def init():
-    fenster = tk.Tk(className=" Hormiguita Langtons")
-    papier = tk.Canvas(fenster, width=750, height=750)
+    fenster = tk.Tk(className=" Hormiguita Langton")
+    papier = tk.Canvas(fenster, width=600, height=600)
     fenster.resizable(False, False)
     papier.pack()
     papier.update()
