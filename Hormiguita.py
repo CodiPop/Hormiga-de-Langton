@@ -3,9 +3,11 @@ import tkinter as tk
 import time
 import turtle
 
-matrix = np.zeros((100, 100))
-pxm= 0
-pym= 0
+zelleW=0
+zelleH=0
+MATRIX = np.zeros((100, 100))
+pxm = 0
+pym = 0
 #Lassen Sie uns die Ausgangsposition einstellen
 x0=400
 y0=400
@@ -19,10 +21,10 @@ richtung = 1
 
 
 def ausgangsposition(papier):
-    global matrix, pym, pxm, zelleW,zelleH,richtung
+    global MATRIX, pym, pxm, zelleW,zelleH,richtung
     pxm = int(x0/zelleW)
-    pym = int(yo/zelleH)
-    matrix[pxm][pym]
+    pym = int(y0/zelleH)
+    MATRIX[pxm][pym]
     if(richtung == 1):
         richtung= 4 
         pym -=1
@@ -35,15 +37,15 @@ def ausgangsposition(papier):
     else:
         richtung = 3 
         pxm -= 1
-    zeile, säule = matrix.shape  
+    zeile, säule = MATRIX.shape  
     papier.create_rectangle( pxm*zelleW, pym*zelleH, pxm*zelleW+zelleW, pym*zelleH+zelleH, fill='black')
 
 
 #Lassen Sie uns stellen die Parameter um eine Matrix zu erstellen
 
 def einrichten_gitter(papier):
-    global zelleW,zelleH,matrix
-    zeile,säule = matrix.shape
+    global zelleW,zelleH,MATRIX
+    zeile,säule = MATRIX.shape
     width = papier.winfo_width()
     height = papier.winfo_height()
     zelleW = int(width/zeile)
@@ -55,8 +57,8 @@ def einrichten_gitter(papier):
     
 
 def checkPosition():
-    global matrix, pxm, pym
-    zeile, säule = matrix.shape
+    global MATRIX, pxm, pym
+    zeile, säule = MATRIX.shape
     if(pxm==säule):
         return True
     elif(pxm==0):
@@ -69,11 +71,11 @@ def checkPosition():
         return False
 
 def aktualiserenPapier(papier):
-    global matrix, zelleW, zelleH, pxm, pym, richtung
+    global MATRIX, zelleW, zelleH, pxm, pym, richtung
     papier.create_rectangle(pxm*zelleH, pym*zelleH, pxm*zelleH+zelleH, pym*zelleH+zelleH, fill='purple')
     papier.update()
-    if(matrix[pxm][pym] == 0):
-        matrix[pxm][pym] == 1
+    if(MATRIX[pxm][pym] == 0):
+        MATRIX[pxm][pym] == 1
         papier.create_rectangle(pxm*zelleW, pym*zelleW, pxm*zelleW+zelleW, pym*zelleH+zelleH, fill='red')
         if(richtung == 1):
             richtung = 2
@@ -88,7 +90,7 @@ def aktualiserenPapier(papier):
             richtung = 1
             pxm += 1
     else:
-        matrix[pxm][pym] = 0
+        MATRIX[pxm][pym] = 0
         papier.create_rectangle(pxm*zelleW, pym*zelleH, pxm*zelleW+zelleW, pym*zelleH+zelleH, fill='white')
         if(richtung == 1):
             richtung = 4
@@ -102,11 +104,13 @@ def aktualiserenPapier(papier):
         else:
             richtung = 3
             pxm -= 1
+    
     papier.update()
     if(checkPosition()):
         return False
     else:
-        return True
+        return True   
+
 
 def init():
     fenster = tk.Tk(className=" Langtons Ant")
@@ -122,7 +126,6 @@ def init():
         sw = aktualiserenPapier(papier)
     
     fenster.mainloop()
-
 
 
 init()
