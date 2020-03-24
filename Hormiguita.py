@@ -6,23 +6,36 @@ import time
 
 root = Tk()
 def speichern():
-  global x0,y0
+  global x0,y0,n,H,W,N
   x0 = int(ex.get())
   y0 = int(ey.get())
+  n = int(en.get())
+  N = int(eN.get())
+  H = n
+  W = n
   root.destroy()
 root.title("Datos iniciales")
-mylabel = Label(root,text="Ingrese las posicion inicial de la hormiga:")
-ex = Entry(root, width=15)
+l1 = Label(root,text="Ingrese las posicion inicial de la hormiga:")
+l2 = Label(root,text="Ingrese el tamaño n de la grilla:")
+l3 = Label(root,text="Ingrese el numero N de iteraciones que desea:")
+ex = Entry(root, width=10)
 ex.insert(0, "X")
-ey = Entry(root, width=15)
+ey = Entry(root, width=10)
 ey.insert(0, "Y")
+en = Entry(root, width=10 )
+eN = Entry(root, width=10 )
 mybutton = Button(root,text="Guardar e iniciar",command=speichern)
-mylabel.grid(row=0,column=0)
+l1.grid(row=0,column=0)
 ex.grid(row=1,column=0)
 ey.grid(row=1,column=1)
-mybutton.grid(row=2,column=0, columnspan=2,) 
+l2.grid(row=2,column=0)
+en.grid(row=3,column=0)
+l3.grid(row=4,column=0)
+eN.grid(row=5,column=0)
+mybutton.grid(row=6,column=0, columnspan=2,) 
 root.mainloop()
-
+print(N)
+print(H)
 print(x0)
 print(y0)
 
@@ -95,7 +108,8 @@ def checkPositions():
         return False
 
 def aktualiserenPapier(papier):
-    global MATRIX, zelleW, zelleH, pxm, pym, richtung
+    global MATRIX, zelleW, zelleH, pxm, pym, richtung, N, sw
+    N = N-1
     papier.create_rectangle(pxm*zelleW, pym*zelleH, pxm*zelleW+zelleW, pym*zelleH+zelleH, fill='red')
     papier.update()
     if(MATRIX[pxm][pym] == 0):
@@ -129,6 +143,12 @@ def aktualiserenPapier(papier):
         else:
             richtung = 3
             pxm -= 1
+        
+    if (N==0):
+        return False
+    else:
+        
+        print(N)
 
     papier.update()
     if(checkPositions()):
@@ -137,19 +157,21 @@ def aktualiserenPapier(papier):
         return True
 
 def init():
+    global sw
     einrichten()
     fenster = tk.Tk(className=" Hormiguita Langton")
-    papier = tk.Canvas(fenster, width=600, height=600)
+    papier = tk.Canvas(fenster, width=W, height=H)
     fenster.resizable(False, False)
     papier.pack()
     papier.update()
     einrichten_gitter(papier)
     ausgangsposition(papier)
     papier.update()
-    sw = True
-    while sw:
+    sw=True
+    while sw==True:
         sw = aktualiserenPapier(papier)
-    
+   
+
     fenster.mainloop()
 
 init()
