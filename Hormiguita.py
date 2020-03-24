@@ -23,10 +23,8 @@ ey.grid(row=1,column=1)
 mybutton.grid(row=2,column=0, columnspan=2,) 
 root.mainloop()
 
-
 print(x0)
 print(y0)
-
 
 def einrichten():
     global x0, y0,zelleW,zelleH,pxm,pym, MATRIX
