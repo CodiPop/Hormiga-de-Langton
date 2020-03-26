@@ -44,7 +44,7 @@ def einrichten():
     global x0, y0,zelleW,zelleH,pxm,pym, MATRIX
     zelleW = 0
     zelleH = 0
-    MATRIX = np.zeros((100, 100))
+    MATRIX = np.zeros((H, W))
     pxm = 0
     pym = 0
 
@@ -62,6 +62,7 @@ richtung = 2
 
 def ausgangsposition(papier):
     global MATRIX, pym, pxm, zelleW, zelleH,richtung
+    print(zelleW)
     pxm = int(x0/zelleW)
     pym = int(y0/zelleW)
     MATRIX[pxm][pym] = 1
@@ -83,12 +84,15 @@ def ausgangsposition(papier):
 
 
 def einrichten_gitter(papier):
-    global MATRIX, zelleW, zelleH
+    global MATRIX, zelleW, zelleH, fenster
     zeile, säule = MATRIX.shape
-    width = papier.winfo_width()
-    height = papier.winfo_height()
-    zelleW = int(width/säule)
-    zelleH = int(height/zeile)
+    #width = papier.winfo_width()
+    #height = papier.winfo_height()
+    width = fenster.winfo_width()
+    height = fenster.winfo_height()
+    zelleW = float(width/säule)
+    print(zelleW)
+    zelleH = float(height/zeile)
     for i in range(säule):
         papier.create_line(i*zelleW, 0, i*zelleW, height, fill="gray")
     for i in range(zeile):
@@ -165,17 +169,21 @@ def aktualiserenPapier(papier):
         return True
 
 def init():
-    global sw, Ncont,l5, l4, fenster, richtung
+    global sw, Ncont,l5, l4, fenster, richtung, t
     einrichten()
    
     fenster = tk.Tk(className=" Hormiguita Langton")
     fenster.resizable(False, False)
-    papier = tk.Canvas(fenster, width=W, height=H)
+    papier = tk.Canvas(fenster, width=600, height=600)
     papier.grid(rowspan=10,column=2)
     l4 = Label(fenster, bd=5, text="Cantidad de pasos N", justify=CENTER,bg='black',  fg='white').grid(row=1, column=3)
     l5 = Label(fenster, bd=5, text=Ncont).grid(row=1,column=4)
     l6 = Label(fenster, bd=5, text="Direccion:", justify=CENTER,bg='black',  fg='white').grid(row=2, column=3)
-    l7 = Label(fenster, bd=5, text=richtung).grid(row=2,column=4)
+    l7 = Label(fenster, bd=5, text="    ").grid(row=2,column=4)
+    l8 = Label(fenster, bd=5, text="Tiempo entre cada paso:",justify=CENTER,bg='black',fg='white').grid(row=3,column=3)
+    eT = Entry(fenster, width = 5)
+    eT.grid(row=3,column = 4)
+    eT.insert(0, 1)
     papier.update()
     einrichten_gitter(papier)
     ausgangsposition(papier)
@@ -183,7 +191,12 @@ def init():
     sw=True
     while sw==True:
         sw = aktualiserenPapier(papier)
-        time.sleep(0.1)
+        t = float(eT.get())
+        if(t!=0 ):
+            time.sleep(t)
+        
+
+        
    
 
     fenster.mainloop()
