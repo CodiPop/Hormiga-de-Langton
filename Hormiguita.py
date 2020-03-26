@@ -38,6 +38,7 @@ print(N)
 print(H)
 print(x0)
 print(y0)
+Ncont = 1
 
 def einrichten():
     global x0, y0,zelleW,zelleH,pxm,pym, MATRIX
@@ -108,8 +109,8 @@ def checkPositions():
         return False
 
 def aktualiserenPapier(papier):
-    global MATRIX, zelleW, zelleH, pxm, pym, richtung, N, sw
-    N = N-1
+    global MATRIX, zelleW, zelleH, pxm, pym, richtung, N, Ncont, fenster,l5
+    Ncont = Ncont + 1
     papier.create_rectangle(pxm*zelleW, pym*zelleH, pxm*zelleW+zelleW, pym*zelleH+zelleH, fill='red')
     papier.update()
     if(MATRIX[pxm][pym] == 0):
@@ -117,15 +118,19 @@ def aktualiserenPapier(papier):
         papier.create_rectangle(pxm*zelleW, pym*zelleH,pxm*zelleW+zelleW, pym*zelleH+zelleH, fill='black')
         if(richtung == 1):
             richtung = 2
+            l7 = Label(fenster, bd=5, text="Derecha").grid(row=2,column=4)
             pym += 1
         elif(richtung == 2):
             richtung = 3
+            l7 = Label(fenster, bd=5, text="Abajo").grid(row=2,column=4)
             pxm -= 1
         elif(richtung == 3):
             richtung = 4
+            l7 = Label(fenster, bd=5, text="Izquierda").grid(row=2,column=4)
             pym -= 1
         else:
             richtung = 1
+            l7 = Label(fenster, bd=5, text="Arriba").grid(row=2,column=4)
             pxm += 1
     else:
         MATRIX[pxm][pym] = 0  # Cambiamos el color de la celda a blanco
@@ -133,23 +138,26 @@ def aktualiserenPapier(papier):
         # Ahora determinamos su posicion y avanzamos
         if(richtung == 1):
             richtung = 4
+            l7 = Label(fenster, bd=5, text="Derecha").grid(row=2,column=4)
             pym -= 1
         elif(richtung == 2):
             richtung = 1
+            l7 = Label(fenster, bd=5, text="Abajo").grid(row=2,column=4)
             pxm += 1
         elif(richtung == 3):
             richtung = 2
+            l7 = Label(fenster, bd=5, text="Izquierda").grid(row=2,column=4)
             pym += 1
         else:
             richtung = 3
+            l7 = Label(fenster, bd=5, text="Arriba").grid(row=2,column=4)
             pxm -= 1
-        
-    if (N==0):
+
+    if (Ncont==N):
         return False
     else:
-        
-        print(N)
-
+        l5 = Label(fenster, bd=5, text=Ncont+1).grid(row=1,column=4)
+    papier.create_rectangle(pxm*zelleW, pym*zelleH, pxm*zelleW+zelleW, pym*zelleH+zelleH, fill='red')
     papier.update()
     if(checkPositions()):
         return False
@@ -157,12 +165,17 @@ def aktualiserenPapier(papier):
         return True
 
 def init():
-    global sw
+    global sw, Ncont,l5, l4, fenster, richtung
     einrichten()
+   
     fenster = tk.Tk(className=" Hormiguita Langton")
-    papier = tk.Canvas(fenster, width=W, height=H)
     fenster.resizable(False, False)
-    papier.pack()
+    papier = tk.Canvas(fenster, width=W, height=H)
+    papier.grid(rowspan=10,column=2)
+    l4 = Label(fenster, bd=5, text="Cantidad de pasos N", justify=CENTER,bg='black',  fg='white').grid(row=1, column=3)
+    l5 = Label(fenster, bd=5, text=Ncont).grid(row=1,column=4)
+    l6 = Label(fenster, bd=5, text="Direccion:", justify=CENTER,bg='black',  fg='white').grid(row=2, column=3)
+    l7 = Label(fenster, bd=5, text=richtung).grid(row=2,column=4)
     papier.update()
     einrichten_gitter(papier)
     ausgangsposition(papier)
@@ -170,6 +183,7 @@ def init():
     sw=True
     while sw==True:
         sw = aktualiserenPapier(papier)
+        time.sleep(0.1)
    
 
     fenster.mainloop()
