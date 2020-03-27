@@ -38,7 +38,7 @@ print(N)
 print(H)
 print(x0)
 print(y0)
-Ncont = 1
+Ncont = 0
 
 def einrichten():
     global x0, y0,zelleW,zelleH,pxm,pym, MATRIX
@@ -62,9 +62,9 @@ richtung = 2
 
 def ausgangsposition(papier):
     global MATRIX, pym, pxm, zelleW, zelleH,richtung
-    print(zelleW)
-    pxm = int(x0/zelleW)
-    pym = int(y0/zelleW)
+    pxm = x0
+    pym = y0
+    print(pxm,pym)
     MATRIX[pxm][pym] = 1
     if(richtung == 1):
         richtung = 4
@@ -86,10 +86,8 @@ def ausgangsposition(papier):
 def einrichten_gitter(papier):
     global MATRIX, zelleW, zelleH, fenster
     zeile, säule = MATRIX.shape
-    #width = papier.winfo_width()
-    #height = papier.winfo_height()
-    width = fenster.winfo_width()
-    height = fenster.winfo_height()
+    width = papier.winfo_width()
+    height = papier.winfo_height()
     zelleW = float(width/säule)
     print(zelleW)
     zelleH = float(height/zeile)
@@ -174,16 +172,22 @@ def init():
    
     fenster = tk.Tk(className=" Hormiguita Langton")
     fenster.resizable(False, False)
-    papier = tk.Canvas(fenster, width=600, height=600)
-    papier.grid(rowspan=10,column=2)
+    papier = tk.Canvas(fenster, width=900, height=650)
+    papier.grid(rowspan=5,columnspan=2)
     l4 = Label(fenster, bd=5, text="Cantidad de pasos N", justify=CENTER,bg='black',  fg='white').grid(row=1, column=3)
     l5 = Label(fenster, bd=5, text=Ncont).grid(row=1,column=4)
     l6 = Label(fenster, bd=5, text="Direccion:", justify=CENTER,bg='black',  fg='white').grid(row=2, column=3)
     l7 = Label(fenster, bd=5, text="    ").grid(row=2,column=4)
     l8 = Label(fenster, bd=5, text="Tiempo entre cada paso:",justify=CENTER,bg='black',fg='white').grid(row=3,column=3)
-    eT = Entry(fenster, width = 5)
-    eT.grid(row=3,column = 4)
-    eT.insert(0, 1)
+    #eT = Entry(fenster, width = 5)
+    #eT.grid(row=3,column = 4)
+    #eT.insert(0, 1)
+    var = StringVar(fenster)
+    var.set(1) # initial value
+
+    option = OptionMenu(fenster, var, 1, 0.5, 0.25, 0.125, 0)
+    option.grid(row=3,column=4)
+
     papier.update()
     einrichten_gitter(papier)
     ausgangsposition(papier)
@@ -191,13 +195,11 @@ def init():
     sw=True
     while sw==True:
         sw = aktualiserenPapier(papier)
-        t = float(eT.get())
+        #t = float(eT.get())
+        t = float(var.get())
         if(t!=0 ):
             time.sleep(t)
         
-
-        
-   
 
     fenster.mainloop()
 
